@@ -12,7 +12,7 @@ use App\Http\Resources\DataResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class UserController extends Controller
+class UserController extends ParentController
 {
 
     public function index(){
@@ -56,5 +56,10 @@ class UserController extends Controller
     public function delete($id)
     {
         return UserFacade::delete($id);
+    }
+
+    public function updatePassword(Request $request, $id)
+    {
+        return UserFacade::updatePassword($request->all(),$id);
     }
 }

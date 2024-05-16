@@ -43,6 +43,11 @@
                                     User Data</a>
                             </li>
                             <li class="mb-2 nav-item">
+                                <a class="nav-link active" id="password-update-tab" data-toggle="tab" href="#password-update"
+                                    role="tab" aria-controls="password-update" aria-selected="true">
+                                    Password Update</a>
+                            </li>
+                            <li class="mb-2 nav-item">
                                 <a class="nav-link" id="permission-management-tab" data-toggle="tab" href="#permission-management"
                                     role="tab" aria-controls="permission-management" aria-selected="true">
                                     Permissions</a>
@@ -58,6 +63,9 @@
                                 <div class="tab-pane fade show active" id="user-data" role="tabpanel">
                                     <UserDataform :userId="props.user.id" />
                                 </div>
+                                <div class="tab-pane fade show active" id="password-update" role="tabpanel">
+                                    <ResetPassword :userId="props.user.id" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,6 +77,7 @@
 
 <script setup>
 import UserDataform from "@/Pages/Users/Components/UserDataForm/editForm.vue"
+import ResetPassword from "@/Pages/Users/Components/ResetPassword/ResetPassword.vue"
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/vue3";
 import { library } from "@fortawesome/fontawesome-svg-core";

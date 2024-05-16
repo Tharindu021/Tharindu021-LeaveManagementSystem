@@ -20,5 +20,6 @@ Route::prefix('user-management')->group(function () {
     Route::get('/{user_id}/getFormData', [UserController::class, "getFormData"])->name('user.form.getFormData');
     Route::post('/{user_id}/update', [UserController::class, "update"])->name('user.form.update');
     Route::delete('/{user_id}/delete', [UserController::class, "delete"])->name('user.form.delete');
+    Route::post('/{user_id}/updatePassword', [UserController::class, "updatePassword"])->name('user.form.updatePassword');
 
 });

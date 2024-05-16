@@ -39,10 +39,7 @@ class PermissionSeeder extends Seeder
                 'name' => 'update_data',
                 'group_name' => 'Admin Privileges',
             ],
-            [
-                'name' => 'delete_data',
-                'group_name' => 'Admin Privileges',
-            ],
+
             //USer
             [
                 'name' => 'read_data',

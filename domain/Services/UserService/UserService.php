@@ -45,4 +45,11 @@ class UserService
         return $user->delete();
     }
 
+    public function updatePassword($data,$id)
+    {
+        $user = $this->user->find($id);
+        $user->password = bcrypt($data['password']);
+        return $user->update();
+    }
+
 }
