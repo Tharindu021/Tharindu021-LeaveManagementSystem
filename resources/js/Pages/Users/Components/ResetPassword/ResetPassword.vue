@@ -36,8 +36,6 @@
 </template>
 
 <script setup>
-import { router } from "@inertiajs/vue3";
-import Swal from "sweetalert2";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faHouse , faFloppyDisk , faTrash } from "@fortawesome/free-solid-svg-icons";
 import { onBeforeMount , ref } from "vue";
