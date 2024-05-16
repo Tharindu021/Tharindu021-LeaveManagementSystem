@@ -27,10 +27,29 @@
                                     active: route().current() == 'dashboard',
                                 }"
                                 class="nav-link active-preloader"
-                                :href="route('dashboard')">
+                                :href="route('dashboard')"
+                            >
                                 <font-awesome-icon icon="fa-solid fa-desktop" />
                                 <span class="ml-2 font-weight-400"
-                                    >Dashboard</span>
+                                    >Dashboard</span
+                                >
+                            </Link>
+                        </li>
+                        <li class="nav-item">
+                            <Link
+                            :class="{
+                                    active__sidebar:
+                                        $page.url.startsWith(
+                                            '/user-management'
+                                        ),
+                                }"
+                                class="nav-link active-preloader"
+                                :href="route('user.index')"
+                            >
+                                <font-awesome-icon icon="fa-solid fa-user" />
+                                <span class="ml-2 hide-menu font-weight-400"
+                                    >User Management</span
+                                >
                             </Link>
                         </li>
                     </ul>
@@ -44,26 +63,23 @@
 import { Link } from "@inertiajs/vue3";
 import { reactive } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faDesktop,
-    faGear,
-    faLayerGroup,
-    faFolder,
-    faBuilding,
-} from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const data = reactive({
     materialTypes: [],
 });
 
-library.add(faDesktop, faLayerGroup, faFolder, faGear, faBuilding);
+library.add(faDesktop, faUser);
 </script>
 
 <style lang="css">
 .sidenav {
-    width: 250px; /* Adjust the width as needed */
-    height: 100%; /* Set the height to fill the viewport */
-    overflow-y: auto; /* Make the sidebar scrollable */
+    width: 250px;
+    /* Adjust the width as needed */
+    height: 100%;
+    /* Set the height to fill the viewport */
+    overflow-y: auto;
+    /* Make the sidebar scrollable */
 }
 
 .navbar-vertical .navbar-brand-img,
