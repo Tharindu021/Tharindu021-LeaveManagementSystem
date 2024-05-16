@@ -7,7 +7,7 @@
                         <div class="row align-items-center mb-3 mt-3">
                             <div class="col-lg-8">
                                 <h6 class="h2 text-dark d-inline-block mb-0">
-                                    Users
+                                    User Management Dashboard
                                 </h6>
                                 <nav aria-label="breadcrumb" class="d-none d-md-block">
                                     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
@@ -17,7 +17,7 @@
                                             </Link>
                                         </li>
                                         <li class="breadcrumb-item active breadcrumb-text" aria-current="page">
-                                            User Management
+                                            User-Management
                                         </li>
                                     </ol>
                                 </nav>
@@ -44,25 +44,9 @@
                                 <div for="purchase_uom" class="col-form-label">
                                     NAME
                                 </div>
-                                <input type="text" class="form-control form-control-sm" name="code" id="code"
+                                <input type="text" class="form-control form-control-sm" name="name" id="name"
                                     v-model="search" placeholder="Name" @keyup="getSearch" />
                             </div>
-                            <!-- <div class="col-md-2 column__left___padding column__right___padding">
-                                <div for="purchase_uom" class="col-form-label">
-                                    USER TYPE
-                                </div>
-                                <Multiselect v-model="select_search_type" :options="types" class="z__index"
-                                    :showLabels="false" :close-on-select="true" :clear-on-select="false"
-                                    :searchable="true" placeholder="User Type" label="user_type" track-by="id" />
-                            </div> -->
-                            <!-- <div class="col-md-3 column__left___padding column__right___padding">
-                                <div for="purchase_uom" class="col-form-label">
-                                    STATUS
-                                </div>
-                                <Multiselect v-model="select_search_status" :options="status" class="z__index"
-                                    :showLabels="false" :close-on-select="true" :clear-on-select="false"
-                                    :searchable="true" placeholder="Select Status" label="status" track-by="id" />
-                            </div> -->
                             <div class="col-md-2 mt-4 column__left___padding">
                                 <a href="javascript:void(0)" @click.prevent="clearFilters"
                                     class="btn btn-sm btn-ash float-end mt-2 pt-2">
@@ -272,41 +256,15 @@
 
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import Swal from "sweetalert2";
-import { reactive, nextTick, ref } from "vue";
+import { ref } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { onBeforeMount, watch } from "vue";
+import { onBeforeMount } from "vue";
 import axios from "axios";
-import Multiselect from "vue-multiselect";
-import {
-    faUsers,
-    faHouse,
-    faFloppyDisk,
-    faCirclePlus,
-    faClone,
-    faCloudArrowDown,
-    faPrint,
-    faWrench,
-    faArrowUpFromBracket,
-    faXmark,
-    faPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUsers } from "@fortawesome/free-solid-svg-icons";
 
-library.add(
-    faUsers,
-    faHouse,
-    faFloppyDisk,
-    faCirclePlus,
-    faClone,
-    faCloudArrowDown,
-    faPrint,
-    faWrench,
-    faArrowUpFromBracket,
-    faXmark,
-    faPen
-);
+library.add(faUsers);
 
 const loading_bar = ref(null);
 const textClassHead = ref("text-start text-uppercase");
@@ -317,10 +275,6 @@ const page = ref(1);
 const perPage = ref([25, 50, 100]);
 const pageCount = ref(25);
 const pagination = ref({});
-const select_search_type = ref(null);
-const select_search_status = ref(null);
-const select_type = ref(null);
-const select_status = ref(null);
 const user = ref({});
 const users = ref([]);
 const validationErrors = ref({});
@@ -399,7 +353,7 @@ const createUser = async () => {
 };
 
 const editUser = async (id) => {
-    window.location.href = route("user.edit", id);
+    window.location.href = route("user.get", id);
 };
 
 const newUser = () => {

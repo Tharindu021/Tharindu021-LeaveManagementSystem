@@ -65,10 +65,6 @@ import { reactive } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faDesktop, faUser } from "@fortawesome/free-solid-svg-icons";
 
-const data = reactive({
-    materialTypes: [],
-});
-
 library.add(faDesktop, faUser);
 </script>
 

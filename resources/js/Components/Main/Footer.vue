@@ -5,7 +5,7 @@
                 <div class="col-lg-12 mb-lg-0 mb-4">
                     <div class="copyright text-center text-sm text-muted">
                         Copyright &copy;
-                        {{ new Date().getFullYear() }} FERENTINO Pvt Ltd
+                        {{ new Date().getFullYear() }} XXXXXXXX Pvt Ltd
                         &nbsp;All rights reserved.
                     </div>
                 </div>

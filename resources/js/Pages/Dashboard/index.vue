@@ -31,10 +31,9 @@
 
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { Head, Link } from '@inertiajs/vue3'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
-import { defineProps } from 'vue';
+
 
 library.add(faHouse);
 
