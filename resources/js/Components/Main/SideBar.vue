@@ -40,6 +40,23 @@
                             :class="{
                                     active__sidebar:
                                         $page.url.startsWith(
+                                            '/my_leave'
+                                        ),
+                                }"
+                                class="nav-link active-preloader"
+                                :href="route('myleave.index')"
+                            >
+                                <font-awesome-icon icon="fa-solid fa-calendar-days" />
+                                <span class="ml-2 hide-menu font-weight-400"
+                                    >MyLeave</span
+                                >
+                            </Link>
+                        </li>
+                        <li class="nav-item">
+                            <Link
+                            :class="{
+                                    active__sidebar:
+                                        $page.url.startsWith(
                                             '/user-management'
                                         ),
                                 }"
@@ -62,9 +79,9 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faDesktop, faUser , faWandMagicSparkles} from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faUser , faCalendarDays} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faDesktop, faUser , faWandMagicSparkles);
+library.add(faDesktop, faUser , faCalendarDays);
 </script>
 
 <style lang="css">

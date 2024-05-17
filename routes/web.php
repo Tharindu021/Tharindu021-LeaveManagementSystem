@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LeaveDataController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -36,4 +37,11 @@ Route::prefix('permission')->group(function () {
     Route::get('/all', [PermissionController::class, "all"])->name('permission.all');
     Route::get('/allGroup', [PermissionController::class, "allGroup"])->name('permission.allGroup');
     Route::post('/{user_id}/update', [PermissionController::class, "updatePermission"])->name('permission.update');
+    Route::get('/{user_id}/userPermission', [PermissionController::class, "userPermission"])->name('permission.list.userPermission');
+});
+Route::prefix('myleave')->group(function () {
+    Route::get('/', [LeaveDataController::class, "myleaveIndex"])->name('myleave.index');
+    Route::get('/myleaveData', [LeaveDataController::class, "myleaveData"])->name('myleave.all');
+    Route::post('/myleaveStore', [LeaveDataController::class, "myleaveStore"])->name('myleave.store');
+    Route::delete('/{leave_id}/myleaveDelete', [LeaveDataController::class, "myleaveDelete"])->name('myleave.delete');
 });

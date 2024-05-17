@@ -10,7 +10,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Resources\DataResource;
 
 
-class RoleController extends Controller
+class RoleController extends ParentController
 {
     public function index()
     {

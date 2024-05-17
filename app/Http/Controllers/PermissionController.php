@@ -6,7 +6,7 @@ use domain\Facades\PermissionFacade\PermissionFacade;
 use domain\Facades\UserFacade\UserFacade;
 use Illuminate\Http\Request;
 
-class PermissionController extends Controller
+class PermissionController extends ParentController
 {
     public function allGroup()
     {
@@ -20,7 +20,14 @@ class PermissionController extends Controller
 
     public function updatePermission(Request $request, $id)
     {
+        $data = $request;
         $user = UserFacade::get($id);
-        $user->syncPermissions($request->permissions);
+        return PermissionFacade::assignPermission($data,$user);
+    }
+
+    public function userPermission($id)
+    {
+        $user = UserFacade::get($id);
+        return PermissionFacade::getUserPermission($user);
     }
 }

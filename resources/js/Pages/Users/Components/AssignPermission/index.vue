@@ -57,11 +57,13 @@ const groups = ref([]);
 const permissions = ref([]);
 const user_permissions = ref([]);
 
+
 library.add(faHouse, faArrowLeftRotate, faFloppyDisk, faCirclePlus, faPen, faTrash, faTimes);
 
 onBeforeMount(() => {
     getPermissions();
     getPermissionGroup();
+    getUserPermission();
 });
 
 const getPermissionGroup = async () => {
@@ -75,7 +77,8 @@ const getPermissions = async () => {
 };
 
 const getUserPermission = async () => {
-    const    
+    const userPermission = (await axios.get(route('permission.list.userPermission' , props.userId))).data;
+    user_permissions.value = userPermission; 
 }
 
 const updatePermission = async () => {

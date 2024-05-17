@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="User Management">
+    <AppLayout title="My Leaves">
         <template #header>
             <div class="header pb-6">
                 <div class="container-fluid">
@@ -7,26 +7,26 @@
                         <div class="row align-items-center mb-3 mt-3">
                             <div class="col-lg-8">
                                 <h6 class="h2 text-dark d-inline-block mb-0">
-                                    User Management Dashboard
+                                    My Leaves
                                 </h6>
                                 <nav aria-label="breadcrumb" class="d-none d-md-block">
                                     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                                         <li class="breadcrumb-item">
                                             <Link :href="route('dashboard')">
-                                            <font-awesome-icon icon="fa-solid fa-users" color="#505050" />
+                                            <font-awesome-icon icon="fa-solid fa-house" color="#505050" />
                                             </Link>
                                         </li>
                                         <li class="breadcrumb-item active breadcrumb-text" aria-current="page">
-                                            User-Management
+                                            My Leaves
                                         </li>
                                     </ol>
                                 </nav>
                             </div>
                             <div class="col-lg-4 text-right">
-                                <a href="javascript:void(0)" @click.prevent="newUser"
+                                <a href="javascript:void(0)" data-toggle="modal" data-target="#addLeaveModal"
                                     class="btn btn-sm btn-neutral float-end">
                                     <font-awesome-icon icon="fa-solid fa-circle-plus" />
-                                    ADD NEW
+                                    ADD LEAVE
                                 </a>
                             </div>
                         </div>
@@ -39,60 +39,79 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card shadow">
-                        <div class="row my-4 mx-2">
-                            <div class="col-md-3 column__right___padding">
-                                <div for="purchase_uom" class="col-form-label">
-                                    NAME
+                        <div class="py-3 mx-3 text-sm card-body">
+                            <div class="flex">
+                                <div class="col-md-3 mx-3 column__right___padding column__left___padding">
+                                    <div for="purchase_uom" class="col-form-label">
+                                        Start Date
+                                    </div>
+                                    <input type="date" class="form-control form-control-sm" name="start_date" id="start_date"
+                                        v-model="search_data.start_date" placeholder="Start Date" @keyup="getSearch" />
+                                 </div>
+                                <div class="col-md-3 mx-3 column__right___padding column__left___padding">
+                                    <div for="purchase_uom" class="col-form-label">
+                                        End Date
+                                    </div>
+                                    <input type="date" class="form-control form-control-sm" name="end_date" id="end_date"
+                                        v-model="search_data.end_date" placeholder="End Date" @keyup="getSearch" />
                                 </div>
-                                <input type="text" class="form-control form-control-sm" name="name" id="name"
-                                    v-model="search" placeholder="Name" @keyup="getSearch" />
-                            </div>
-                            <div class="col-md-2 mt-4 column__left___padding">
+                                <div class="col-md-2 pl-4 mt-4 column__left___padding">
                                 <a href="javascript:void(0)" @click.prevent="clearFilters"
-                                    class="btn btn-sm btn-ash float-end mt-2 pt-2">
+                                    class="btn btn-sm btn-ash float-end mt-2 pt-2 text-end">
                                     CLEAR
                                 </a>
                             </div>
-                            <div class="text-muted ml-auto mx-4 mt-4">
-                                <div class="inline-block">
-                                    <select class="form-control form-control-sm per-page-entry mt-2" :value="100"
-                                        v-model="pageCount" @change="perPageChange" name="PageData" id="pageData">
-                                        <option v-for="perPageCount in perPage" :key="perPageCount"
-                                            :value="perPageCount" v-text="perPageCount" />
-                                    </select>
+                                <div class="flex text-muted ml-auto mx-2">
+                                    <div class="inline-block mx-1">
+                                        <select class="form-control form-control-sm per-page-entry" :value="25"
+                                            v-model="pageCount" @change="perPageChange">
+                                            <option v-for="perPageCount in perPage" :key="perPageCount"
+                                                :value="perPageCount" v-text="perPageCount" />
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mx-4">
+                        <div class="row mx-4 mt-2">
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th :class="textClassHead">Start Date</th>
+                                            <th :class="textClassHead">End Date</th>
+                                            <th :class="textClassHead">Reason</th>
                                             <th :class="textClassHead">
-                                                Name
+                                                Status
                                             </th>
-                                            <th :class="textClassHead">
-                                                Email
-                                            </th>
-                                            <th :class="textClassHead">User Name</th>
-                                            <th :class="textClassHead">
-                                                Contact Number
-                                            </th>
+                                            <th :class="textClassHead"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="user in users" :key="user.id" :class="rowClass"  @click.prevent="editUser(user.id)">
+                                        <tr v-for="leave_data in leave_datas" :key="leave_data.id" :class="rowClass">
                                             <td :class="textClassBody">
-                                                {{ user.name }}
+                                                {{ leave_data.start_date }}
                                             </td>
                                             <td :class="textClassBody">
-                                                {{ user.email }}
+                                                {{ leave_data.end_date }}
                                             </td>
                                             <td :class="textClassBody">
-                                                {{ user.username }}
+                                                {{ leave_data.reason }}
                                             </td>
-                                            <td :class="textClassBody">
-                                                {{ user.telephone }}
+                                            <td>
+                                                <span v-if="leave_data.status == 0"
+                                                    class="badge bg-danger text-white fw-bold ml-3">Pending</span>
+                                                <span v-if="leave_data.status == 1"
+                                                    class="badge bg-sucess text-white fw-bold ml-3">Accepted</span>
+                                                <span v-if="leave_data.status == 2"
+                                                    class="badge bg-warning text-white fw-bold ml-3">Rejected</span>
+                                            </td>
+                                            <td :class="iconClassBody">
+                                                <a type="button" class="p-2 float-end" href="javascript:void(0)"
+                                                    @click.prevent="
+                                                deleteLeave(leave_data.id)
+                                                ">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -142,20 +161,23 @@
                                                     ? 'active'
                                                     : ''
                                                 ">
-                                                        <a class="page-link" @click="setPage(page)">{{ page }}
-                                                        </a>
+                                                        <a class="page-link" @click="
+                                                setPage(page)
+                                                ">{{ page }}</a>
                                                     </li>
                                                 </template>
                                             </template>
                                             <li class="page-item" :class="pagination.current_page ==
                                                     pagination.last_page
                                                     ? 'disabled'
-                                                    : ''">
+                                                    : ''
+                                                ">
                                                 <a class="page-link" href="javascript:void(0)" @click="
                                                 setPage(
                                                     pagination.current_page +
                                                     1
-                                                )">
+                                                )
+                                                ">
                                                     <i class="fa-solid fa-angles-right"></i>
                                                 </a>
                                             </li>
@@ -169,13 +191,13 @@
             </div>
         </template>
         <template #modals>
-            <div class="modal fade" id="newUserModal" data-backdrop="static" tabindex="-1" role="dialog"
-                aria-labelledby="newUserModal" aria-hidden="true">
+            <div class="modal fade" id="addLeaveModal" data-backdrop="static" tabindex="-1" role="dialog"
+                aria-labelledby="addLeaveModal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title font-weight-bolder text-info text-gradient" id="add_UserLabel">
-                                ADD USER
+                            <h5 class="modal-title font-weight-bolder text-info text-gradient" id="add_leave">
+                                Leave Form
                             </h5>
                             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">
@@ -186,15 +208,15 @@
                         <div class="modal-body p-0">
                             <div class="card-plain">
                                 <div class="card-body m-2">
-                                    <form role="form text-left" @submit.prevent="createUser"
+                                    <form role="form text-left" @submit.prevent="createLeave"
                                         enctype="multipart/form-data">
                                         <div class="row mb-1">
-                                            <div for="name" class="col-md-3 col-form-label col-form-label">
-                                                NAME
+                                            <div for="start_date" class="col-md-3 col-form-label col-form-label">
+                                                Start Date
                                             </div>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="name"
-                                                    v-model="user.name" id="name" placeholder="Name" required />
+                                                <input type="date" class="form-control form-control-sm" name="start_date"
+                                                    v-model="leave_data.start_date" id="start_date" placeholder="Start Date" required />
                                                 <small v-if="validationErrors.message
                                                 " id="msg_code" class="text-danger form-text text-error-msg error">
                                                     {{
@@ -204,12 +226,12 @@
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <div for="emai" class="col-md-3 col-form-label col-form-label">
-                                                EMAIL
+                                            <div for="end_date" class="col-md-3 col-form-label col-form-label">
+                                                END DATE
                                             </div>
                                             <div class="col-md-9">
-                                                <input type="email" class="form-control form-control-sm" name="email"
-                                                    v-model="user.email" id="email" placeholder="Email" required />
+                                                <input type="date" class="form-control form-control-sm" name="end_date"
+                                                    v-model="leave_data.end_date" id="end_date" placeholder="End Date" required />
                                                 <small v-if="validationErrors.message
                                                 " id="msg_code"
                                                     class="text-danger form-text text-error-msg error">{{
@@ -219,12 +241,12 @@
                                             </div>
                                         </div>
                                         <div class="row mb-1">
-                                            <div for="password" class="col-md-3 col-form-label col-form-label">
-                                                PASSWORD
+                                            <div for="reason" class="col-md-3 col-form-label col-form-label">
+                                                REASON
                                             </div>
                                             <div class="col-md-9">
-                                                <input type="password" class="form-control form-control-sm" name="password"
-                                                    v-model="user.password" id="password" placeholder="Password" required />
+                                                <input type="text" class="form-control form-control-sm" name="reason"
+                                                    v-model="leave_data.reason" id="reason" placeholder="Reason" required />
                                                 <small v-if="validationErrors.message
                                                 " id="msg_code"
                                                     class="text-danger form-text text-error-msg error">{{
@@ -233,11 +255,10 @@
                                                 </small>
                                             </div>
                                         </div>
-                                        
                                         <div class="text-right mt-2">
                                             <button type="submit" class="btn btn-round btn-outline--info btn-sm mb-0">
                                                 <font-awesome-icon icon="fa-solid fa-floppy-disk" />
-                                                CREATE
+                                                Send
                                             </button>
                                         </div>
                                     </form>
@@ -256,31 +277,61 @@
 
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { ref } from "vue";
+import Swal from "sweetalert2";
+import { nextTick, reactive, ref } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, watch } from "vue";
 import axios from "axios";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import LoadingBar from "@/Components/Basic/LoadingBar.vue";
 
-library.add(faUsers);
+import {
+    faHouse,
+    faFloppyDisk,
+    faCirclePlus,
+    faCloudArrowDown,
+    faPrint,
+    faWrench,
+    faCircleCheck,
+    faCircleMinus,
+    faTrash,
+    faArrowUpFromBracket,
+    faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(
+    faHouse,
+    faFloppyDisk,
+    faCirclePlus,
+    faCloudArrowDown,
+    faPrint,
+    faWrench,
+    faCircleCheck,
+    faCircleMinus,
+    faTrash,
+    faArrowUpFromBracket,
+    faXmark,
+);
+
 
 const loading_bar = ref(null);
 const textClassHead = ref("text-start text-uppercase");
 const textClassBody = ref("text-start");
+const iconClassBody = ref("text-right");
 const rowClass = ref("cursor-pointer");
 const search = ref(null);
 const page = ref(1);
 const perPage = ref([25, 50, 100]);
 const pageCount = ref(25);
 const pagination = ref({});
-const user = ref({});
-const users = ref([]);
+const leave_data = ref({});
+const leave_datas = ref([]);
+const search_data = ref({});
 const validationErrors = ref({});
 
 onBeforeMount(() => {
-    getUserData();
+    getLeaveData();
     reload();
 });
 
@@ -303,62 +354,89 @@ const resetValidationErrors = () => {
 };
 
 const convertValidationNotification = (error) => {
-    validationErrors.message = error.message;
+    validationErrors.value.message = error.message;
 };
 
 const clearFilters = async () => {
-    search.value = null;
+    search_data.value = {};
     reload();
 };
 
 const reload = async () => {
+    nextTick(() => {
+        //loading_bar.value.start();
+    });
     try {
         const response = (
-            await axios.get(route("user.all"), {
+            await axios.get(route("myleave.all"), {
                 params: {
                     page: page.value,
                     per_page: pageCount.value,
                     "filter[search]": search.value,
+                    search_start_date: search_data.value.start_date,
+                    search_end_date: search_data.value.end_date,
                 },
             })
         ).data;
-        users.value = response.data;
+        leave_datas.value = response.data;
         pagination.value = response.meta;
+        nextTick(() => {
+            //loading_bar.value.finish();
+        });
     } catch (error) {
-        console.log("Error reloading users data:", error);
+        console.log("Error reloading leave_data data:", error);
     }
 };
 
-
-const getUserData = async () => {
+const getLeaveData = async () => {
+    nextTick(() => {
+        //loading_bar.value.start();
+    });
     try {
-        const response = (await axios.get(route("user.all"))).data;
-        users.value = response.data;
+        const response = (await axios.get(route("myleave.all"))).data;
+        leave_datas.value = response.data;
         pagination.value = response.meta;
+        nextTick(() => {
+            //loading_bar.value.finsh();
+        });
     } catch (error) {
-        console.log("Error fetching users data:", error);
+        console.log("Error fetching leave data:", error);
     }
 };
 
-const createUser = async () => {
+const createLeave = async () => {
     resetValidationErrors();
     try {
-        await axios.post(route("user.store"), user.value)
-        $("#newUserModal").modal("hide");
-        user.value = {};
+        await axios.post(route("myleave.store"), leave_data.value);
+        $("#addLeaveModal").modal("hide");
+        leave_data.value = {};
         reload();
     } catch (error) {
         convertValidationNotification(error);
     }
 };
 
-const editUser = async (id) => {
-    window.location.href = route("user.get", id);
-};
-
-const newUser = () => {
-    user.value = {};
-    $("#newUserModal").modal("show");
+const deleteLeave = async (id) => {
+    console.log(id);
+    try {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C00202",
+            cancelButtonColor: "#6CA925",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(route("myleave.delete", id));
+                reload();
+                Swal.fire("Deleted!", `Your Leave Record has been deleted.`, "success");
+            }
+        });
+    } catch (error) {
+        convertValidationNotification(error);
+    }
 };
 
 </script>

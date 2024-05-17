@@ -22,4 +22,16 @@ class PermissionService
     {
         return $this->permission->all();
     }
+
+    public function assignPermission($data,$user)
+    {
+        $user->syncPermissions($data->permissions);
+    }
+
+    public function getUserPermission($user)
+    {
+        
+        $permission = $user->getAllPermissions();
+        return $permission;
+    }
 }
