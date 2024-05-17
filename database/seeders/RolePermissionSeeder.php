@@ -15,7 +15,7 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $admin = Role::where('name','admin')->first();
-        $admin->givePermissionTo(['create_data' , 'read_data' , 'delete_data', 'update_data' ]);
+        $admin->givePermissionTo(['create_user' , 'view_user' , 'delete_user', 'update_user', 'update_password', 'update_permission' ]);
         
         $user = User::where('email','admin@gmail.com')->first();
         $user->assignRole('admin');

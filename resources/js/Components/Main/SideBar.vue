@@ -61,11 +61,10 @@
 
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { reactive } from "vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faDesktop, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faUser , faWandMagicSparkles} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faDesktop, faUser);
+library.add(faDesktop, faUser , faWandMagicSparkles);
 </script>
 
 <style lang="css">

@@ -43,14 +43,14 @@
                                     User Data</a>
                             </li>
                             <li class="mb-2 nav-item">
-                                <a class="nav-link active" id="password-update-tab" data-toggle="tab" href="#password-update"
+                                <a class="nav-link" id="password-update-tab" data-toggle="tab" href="#password-update"
                                     role="tab" aria-controls="password-update" aria-selected="true">
                                     Password Update</a>
                             </li>
                             <li class="mb-2 nav-item">
-                                <a class="nav-link" id="permission-management-tab" data-toggle="tab" href="#permission-management"
-                                    role="tab" aria-controls="permission-management" aria-selected="true">
-                                    Permissions</a>
+                                <a class="nav-link" id="permission-tab" data-toggle="tab" href="#permission-update"
+                                    role="tab" aria-controls="permission-update" aria-selected="true">
+                                    Permission Update</a>
                             </li>
                             <li hidden></li>
                         </ul>
@@ -63,8 +63,11 @@
                                 <div class="tab-pane fade show active" id="user-data" role="tabpanel">
                                     <UserDataform :userId="props.user.id" />
                                 </div>
-                                <div class="tab-pane fade show active" id="password-update" role="tabpanel">
+                                <div class="tab-pane fade show" id="password-update" role="tabpanel">
                                     <ResetPassword :userId="props.user.id" />
+                                </div>
+                                <div class="tab-pane fade show " id="permission-update" role="tabpanel">
+                                    <AssignPermission :userId="props.user.id" />
                                 </div>
                             </div>
                         </div>
@@ -78,6 +81,7 @@
 <script setup>
 import UserDataform from "@/Pages/Users/Components/UserDataForm/editForm.vue"
 import ResetPassword from "@/Pages/Users/Components/ResetPassword/ResetPassword.vue"
+import AssignPermission from "@/Pages/Users/Components/AssignPermission/index.vue"
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { Link } from "@inertiajs/vue3";
 import { library } from "@fortawesome/fontawesome-svg-core";

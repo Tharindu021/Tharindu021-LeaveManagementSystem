@@ -22,35 +22,29 @@ class PermissionSeeder extends Seeder
     {
         $permissions =
         [
-            //Admin
+            //User
             [
-                'name' => 'create_data',
-                'group_name' => 'Admin Privileges',
-            ],
-            [
-                'name' => 'read_data',
-                'group_name' => 'Admin Privileges',
-            ],
-            [
-                'name' => 'delete_data',
-                'group_name' => 'Admin Privileges',
-            ],
-            [
-                'name' => 'update_data',
-                'group_name' => 'Admin Privileges',
-            ],
-
-            //USer
-            [
-                'name' => 'read_data',
+                'name' => 'create_user',
                 'group_name' => 'User Privileges',
             ],
             [
-                'name' => 'read_data',
+                'name' => 'view_user',
                 'group_name' => 'User Privileges',
             ],
             [
-                'name' => 'delete_data',
+                'name' => 'delete_user',
+                'group_name' => 'User Privileges',
+            ],
+            [
+                'name' => 'update_user',
+                'group_name' => 'User Privileges',
+            ],
+            [
+                'name' => 'update_password',
+                'group_name' => 'User Privileges',
+            ],
+            [
+                'name' => 'update_permission',
                 'group_name' => 'User Privileges',
             ],
         ];
