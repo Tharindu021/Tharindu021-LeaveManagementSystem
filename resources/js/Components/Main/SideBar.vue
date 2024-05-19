@@ -35,7 +35,8 @@
                                 >
                             </Link>
                         </li>
-                        <li class="nav-item">
+                        <!-- v-if="$page.props.auth.user.email != 'admin@gmail.com'" -->
+                        <li class="nav-item" >
                             <Link
                             :class="{
                                     active__sidebar:
@@ -52,7 +53,7 @@
                                 >
                             </Link>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="$page.props.auth.user.email == 'admin@gmail.com'">
                             <Link
                             :class="{
                                     active__sidebar:

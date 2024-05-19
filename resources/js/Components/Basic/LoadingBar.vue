@@ -2,29 +2,34 @@
     <div v-if="loading" class="loading-page">
         <div class="text-center container loading-body">
             <p class="text-success pt-1 animation_i">
-                <img
-                    src="/img/logo/logo-loader.png"
-                    alt=""
-                    class="animation_img"
-                />
+                <img src="/img/logo/logo.png" alt="" class="animation_img">
             </p>
         </div>
     </div>
 </template>
 
-<script setup>
+<script>
+import { ref } from 'vue';
 
-import { ref } from "vue";
+export default {
+    setup() {
+        const loading = ref(false);
 
-const loading = ref(false);
+        const start = () => {
+            loading.value = true;
+        };
 
-function start() {
-    loading.value = true;
-}
+        const finish = () => {
+            loading.value = false;
+        };
 
-function finish() {
-    loading.value = false;
-}
+        return {
+            loading,
+            start,
+            finish
+        };
+    },
+};
 </script>
 
 <style scoped>
@@ -54,7 +59,7 @@ function finish() {
 }
 
 .animation_img {
-    width: 6rem;
+    width: 8rem;
     margin: auto;
 }
 
@@ -84,12 +89,11 @@ function finish() {
     padding: 0px;
     opacity: 0.5;
     border: 3px solid #09acfd;
-    -webkit-animation: loader 1s ease-in-out infinite alternate;
     animation: loader 1s ease-in-out infinite alternate;
 }
 
 .loader:before {
-    content: " ";
+    content: ' ';
     position: absolute;
     z-index: -1;
     top: 5px;
@@ -100,7 +104,7 @@ function finish() {
 }
 
 .loader:after {
-    content: " ";
+    content: ' ';
     position: absolute;
     z-index: -1;
     top: 15px;

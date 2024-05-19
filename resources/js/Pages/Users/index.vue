@@ -256,13 +256,14 @@
 
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref , nextTick } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { onBeforeMount } from "vue";
 import axios from "axios";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import LoadingBar from "@/Components/Basic/LoadingBar.vue";
 
 library.add(faUsers);
 
@@ -278,6 +279,7 @@ const pagination = ref({});
 const user = ref({});
 const users = ref([]);
 const validationErrors = ref({});
+const validationMessage = ref(null);
 
 onBeforeMount(() => {
     getUserData();
@@ -299,11 +301,56 @@ const perPageChange = async () => {
 };
 
 const resetValidationErrors = () => {
-    validationErrors.value = [];
+    validationErrors.value = {};
+    validationMessage.value = null;
 };
 
+
 const convertValidationNotification = (error) => {
-    validationErrors.message = error.message;
+    resetValidationErrors();
+    if (!(error.response && error.response.data)) return;
+    const { message } = error.response.data;
+
+    errorMessage(message);
+};
+
+const convertValidationError = (err) => {
+    resetValidationErrors();
+    if (!(err.response && err.response.data)) return;
+    const { message, errors } = err.response.data;
+    // Update the assignment of validationMessage and validationErrors
+    validationMessage.value = message;
+    if (errors) {
+        for (const error in errors) {
+            validationErrors.value[error] = errors[error][0];
+        }
+    }
+};
+
+const successMessage = (message) => {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: message,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+    });
+};
+
+const errorMessage = (message) => {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: message,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+    });
 };
 
 const clearFilters = async () => {
@@ -312,6 +359,10 @@ const clearFilters = async () => {
 };
 
 const reload = async () => {
+    nextTick(() => {
+        resetValidationErrors();
+        loading_bar.value.start();
+    });
     try {
         const response = (
             await axios.get(route("user.all"), {
@@ -324,19 +375,31 @@ const reload = async () => {
         ).data;
         users.value = response.data;
         pagination.value = response.meta;
+        loading_bar.value.finish();
     } catch (error) {
-        console.log("Error reloading users data:", error);
+        convertValidationNotification(error);
+        nextTick(() => {
+        loading_bar.value.finish();
+    });
     }
 };
 
 
 const getUserData = async () => {
+    nextTick(() => {
+        resetValidationErrors();
+        loading_bar.value.start();
+    });
     try {
         const response = (await axios.get(route("user.all"))).data;
         users.value = response.data;
         pagination.value = response.meta;
+        loading_bar.value.finish();
     } catch (error) {
-        console.log("Error fetching users data:", error);
+        convertValidationNotification(error);
+        nextTick(() => {
+        loading_bar.value.finish();
+    });
     }
 };
 

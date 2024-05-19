@@ -66,51 +66,70 @@ onBeforeMount(() => {
     getUserPermission();
 });
 
-const getPermissionGroup = async () => {
-    const groups_data = (await axios.get(route("permission.allGroup"))).data;
-    groups.value = groups_data;
-};
-
-const getPermissions = async () => {
-    const permissions_data = (await axios.get(route("permission.all"))).data;
-    permissions.value = permissions_data;
-};
-
-const getUserPermission = async () => {
-    const userPermission = (await axios.get(route('permission.list.userPermission' , props.userId))).data;
-    user_permissions.value = userPermission; 
-}
-
-const updatePermission = async () => {
-    try {
-        console.log(props.userId);
-        await axios.post(route("permission.update", props.userId), {
-            permissions: user_permissions.value,
-        });
-        successMessage('Role Permission Updated Successfully');
-        window.location.reload();
-    } catch (error) {
-        convertValidationError(error);
-    }
-}
-
-onMounted(() => {
-    initData();
-});
-
-const initData = () => {
-    // Your initialization logic here
-};
-
 const successMessage = (message) => {
     Swal.fire({
         icon: 'success',
         title: 'Success',
         text: message,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
     });
 };
 
-const convertValidationError = (error) => {
-    // Your error handling logic here
+const errorMessage = (message) => {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: message,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+    });
 };
+
+const getPermissionGroup = async () => {
+    try{
+        const groups_data = (await axios.get(route("permission.allGroup"))).data;
+    groups.value = groups_data;
+    }catch (error){
+        console.error(error.message);
+    }
+};
+
+const getPermissions = async () => {
+    try{
+        const permissions_data = (await axios.get(route("permission.all"))).data;
+        permissions.value = permissions_data;
+     }catch (error){
+        console.error(error.message);
+     }  
+};
+
+const getUserPermission = async () => {
+    try{
+        const userPermission = (await axios.get(route('permission.list.userPermission' , props.userId))).data;
+        user_permissions.value = userPermission; 
+    }catch (error){
+        console.error(error.message);
+    }
+}
+
+const updatePermission = async () => {
+    try {
+        //console.log(props.userId);
+        await axios.post(route("permission.update", props.userId), {
+            permissions: user_permissions.value,
+        });
+        successMessage('Permission Updated Successfully');
+        window.location.reload();
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
 </script>
