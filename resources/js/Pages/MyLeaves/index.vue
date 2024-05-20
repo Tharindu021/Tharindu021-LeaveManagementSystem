@@ -101,7 +101,7 @@
                                                 <span v-if="leave_data.status == 0"
                                                     class="badge bg-danger text-white fw-bold ml-3">Pending</span>
                                                 <span v-if="leave_data.status == 1"
-                                                    class="badge bg-sucess text-white fw-bold ml-3">Accepted</span>
+                                                    class="badge bg-success text-white fw-bold ml-3">Accepted</span>
                                                 <span v-if="leave_data.status == 2"
                                                     class="badge bg-warning text-white fw-bold ml-3">Rejected</span>
                                             </td>
@@ -407,7 +407,6 @@ const clearFilters = async () => {
 };
 
 const reload = async () => {
-    console.log(search_data.value)
     nextTick(() => {
         resetValidationErrors();
         loading_bar.value.start();
@@ -472,7 +471,6 @@ const createLeave = async () => {
 const deleteLeave = async (id) => {
     loading_bar.value.start();
     resetValidationErrors();
-    console.log(id);
     try {
         loading_bar.value.finish();
         Swal.fire({

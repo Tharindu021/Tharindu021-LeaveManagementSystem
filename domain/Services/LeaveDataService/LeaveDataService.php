@@ -23,4 +23,18 @@ class LeaveDataService
         return $leave_data->delete();
     }
 
+    public function acceptLeave($id)
+    {
+        $leave_data = $this->leave_data->find($id);
+        $leave_data->status = 1;
+        $leave_data->update();
+    }
+
+    public function rejectLeave($id)
+    {
+        $leave_data = $this->leave_data->find($id);
+        $leave_data->status = 2;
+        $leave_data->update();
+    }
+
 }

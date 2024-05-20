@@ -40,9 +40,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, onBeforeMount } from 'vue';
+import { ref , onBeforeMount } from 'vue';
 import Swal from 'sweetalert2';
-import { usePage } from '@inertiajs/vue3';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faFloppyDisk, faCirclePlus, faPen, faTrash, faTimes, faArrowLeftRotate } from '@fortawesome/free-solid-svg-icons';
 

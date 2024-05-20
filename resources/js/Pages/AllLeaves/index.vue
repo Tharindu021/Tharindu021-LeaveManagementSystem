@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="My Leaves">
+    <AppLayout title="All Leaves">
         <template #header>
             <div class="header pb-6">
                 <div class="container-fluid">
@@ -7,7 +7,7 @@
                         <div class="row align-items-center mb-3 mt-3">
                             <div class="col-lg-8">
                                 <h6 class="h2 text-dark d-inline-block mb-0">
-                                    My Leaves
+                                    All Leaves
                                 </h6>
                                 <nav aria-label="breadcrumb" class="d-none d-md-block">
                                     <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
@@ -17,24 +17,16 @@
                                             </Link>
                                         </li>
                                         <li class="breadcrumb-item active breadcrumb-text" aria-current="page">
-                                            My Leaves
+                                            All Leaves
                                         </li>
                                     </ol>
                                 </nav>
-                            </div>
-                            <div class="col-lg-4 text-right">
-                                <a href="javascript:void(0)" data-toggle="modal" data-target="#addLeaveModal"
-                                    class="btn btn-sm btn-neutral float-end">
-                                    <font-awesome-icon icon="fa-solid fa-circle-plus" />
-                                    ADD LEAVE
-                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </template>
-
         <template #content>
             <div class="row">
                 <div class="col-lg-12">
@@ -77,17 +69,21 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
+                                            <th :class="textClassHead">User Name</th>
                                             <th :class="textClassHead">Start Date</th>
                                             <th :class="textClassHead">End Date</th>
                                             <th :class="textClassHead">Reason</th>
-                                            <th :class="textClassHead">
-                                                Status
+                                            <th :class="statusClassHead">
+                                                Action
                                             </th>
                                             <th :class="textClassHead"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="leave_data in leave_datas" :key="leave_data.id" :class="rowClass">
+                                            <td :class="textClassBody">
+                                                {{ leave_data.user_name.name }}
+                                            </td>
                                             <td :class="textClassBody">
                                                 {{ leave_data.start_date }}
                                             </td>
@@ -97,11 +93,19 @@
                                             <td :class="textClassBody">
                                                 {{ leave_data.reason }}
                                             </td>
-                                            <td>
-                                                <span v-if="leave_data.status == 0"
-                                                    class="badge bg-danger text-white fw-bold ml-3">Pending</span>
+                                            <td :class="statusClassBody">
+                                                <span v-if="leave_data.status == 0">
+                                                    <a type="button" href="javascript:void(0)"
+                                                    @click.prevent="acceptLeave(leave_data.id)">
+                                                        <span class="badge bg-success text-white fw-bold ml-3">Accept</span>
+                                                    </a>
+                                                    <a type="button" href="javascript:void(0)"
+                                                    @click.prevent="rejectLeave(leave_data.id)">
+                                                        <span class="badge bg-danger text-white fw-bold ml-3">Reject</span>
+                                                    </a>
+                                                </span>
                                                 <span v-if="leave_data.status == 1"
-                                                    class="badge bg-sucess text-white fw-bold ml-3">Accepted</span>
+                                                    class="badge bg-success text-white fw-bold ml-3">Accepted</span>
                                                 <span v-if="leave_data.status == 2"
                                                     class="badge bg-warning text-white fw-bold ml-3">Rejected</span>
                                             </td>
@@ -190,85 +194,6 @@
                 </div>
             </div>
         </template>
-        <template #modals>
-            <div class="modal fade" id="addLeaveModal" data-backdrop="static" tabindex="-1" role="dialog"
-                aria-labelledby="addLeaveModal" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title font-weight-bolder text-info text-gradient" id="add_leave">
-                                Leave Form
-                            </h5>
-                            <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">
-                                    <font-awesome-icon icon="fa-solid fa-xmark" />
-                                </span>
-                            </button>
-                        </div>
-                        <div class="modal-body p-0">
-                            <div class="card-plain">
-                                <div class="card-body m-2">
-                                    <form role="form text-left" @submit.prevent="createLeave"
-                                        enctype="multipart/form-data">
-                                        <div class="row mb-1">
-                                            <div for="start_date" class="col-md-3 col-form-label col-form-label">
-                                                Start Date
-                                            </div>
-                                            <div class="col-md-9">
-                                                <input type="date" class="form-control form-control-sm" name="start_date"
-                                                    v-model="leave_data.start_date" id="start_date" placeholder="Start Date" required />
-                                                <small v-if="validationErrors.message
-                                                " id="msg_code" class="text-danger form-text text-error-msg error">
-                                                    {{
-                                                validationErrors.message
-                                            }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <div for="end_date" class="col-md-3 col-form-label col-form-label">
-                                                END DATE
-                                            </div>
-                                            <div class="col-md-9">
-                                                <input type="date" class="form-control form-control-sm" name="end_date"
-                                                    v-model="leave_data.end_date" id="end_date" placeholder="End Date" required />
-                                                <small v-if="validationErrors.message
-                                                " id="msg_code"
-                                                    class="text-danger form-text text-error-msg error">{{
-                                                validationErrors.message
-                                            }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <div for="reason" class="col-md-3 col-form-label col-form-label">
-                                                REASON
-                                            </div>
-                                            <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="reason"
-                                                    v-model="leave_data.reason" id="reason" placeholder="Reason" required />
-                                                <small v-if="validationErrors.message
-                                                " id="msg_code"
-                                                    class="text-danger form-text text-error-msg error">{{
-                                                validationErrors.message
-                                            }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="text-right mt-2">
-                                            <button type="submit" class="btn btn-round btn-outline--info btn-sm mb-0">
-                                                <font-awesome-icon icon="fa-solid fa-floppy-disk" />
-                                                Send
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
         <template #loader>
             <LoadingBar ref="loading_bar" />
         </template>
@@ -278,16 +203,16 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import Swal from "sweetalert2";
-import { nextTick, reactive, ref } from "vue";
+import { nextTick, ref } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { onBeforeMount, watch } from "vue";
+import { onBeforeMount } from "vue";
 import axios from "axios";
 import LoadingBar from "@/Components/Basic/LoadingBar.vue";
 
 import {
-    faHouse,
+    faHouse, 
     faFloppyDisk,
     faCirclePlus,
     faCloudArrowDown,
@@ -318,6 +243,8 @@ library.add(
 const loading_bar = ref(null);
 const textClassHead = ref("text-start text-uppercase");
 const textClassBody = ref("text-start");
+const statusClassHead = ref("text-center");
+const statusClassBody = ref("text-center");
 const iconClassBody = ref("text-right");
 const rowClass = ref("cursor-pointer");
 const search = ref(null);
@@ -407,14 +334,13 @@ const clearFilters = async () => {
 };
 
 const reload = async () => {
-    console.log(search_data.value)
     nextTick(() => {
         resetValidationErrors();
         loading_bar.value.start();
     });
     try {
         const response = (
-            await axios.get(route("myleave.all"), {
+            await axios.get(route("allleave.all"), {
                 params: {
                     page: page.value,
                     per_page: pageCount.value,
@@ -441,7 +367,7 @@ const getLeaveData = async () => {
         loading_bar.value.start();
     });
     try {
-        const response = (await axios.get(route("myleave.all"))).data;
+        const response = (await axios.get(route("allleave.all"))).data;
         leave_datas.value = response.data;
         pagination.value = response.meta;
         loading_bar.value.finsh();
@@ -453,26 +379,9 @@ const getLeaveData = async () => {
     }
 };
 
-const createLeave = async () => {
-    resetValidationErrors();
-    loading_bar.value.start();
-    try {
-        await axios.post(route("myleave.store"), leave_data.value);
-        $("#addLeaveModal").modal("hide");
-        leave_data.value = {};
-        successMessage('Your Leave Succefully Create');
-        loading_bar.value.finish();
-        reload();
-    } catch (error) {
-        convertValidationNotification(error);
-        loading_bar.value.finish();
-    }
-};
-
 const deleteLeave = async (id) => {
     loading_bar.value.start();
     resetValidationErrors();
-    console.log(id);
     try {
         loading_bar.value.finish();
         Swal.fire({
@@ -485,7 +394,7 @@ const deleteLeave = async (id) => {
             confirmButtonText: "Yes, delete it!",
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(route("myleave.delete", id));
+                axios.delete(route("allleave.delete", id));
                 reload();
                 successMessage('Your Leave Record has been deleted.');
             }
@@ -495,6 +404,58 @@ const deleteLeave = async (id) => {
         loading_bar.value.finish();
     }
 };
+
+const acceptLeave = async (id) => {
+    loading_bar.value.start();
+    resetValidationErrors();
+    try {
+        loading_bar.value.finish();
+        Swal.fire({
+            title: "Accept Leave.",
+            text: "You want to accept the Leave?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C00202",
+            cancelButtonColor: "#6CA925",
+            confirmButtonText: "Yes, Accept it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.get(route("allleave.acceptLeave", id));
+                reload();
+                successMessage('Your Accept the leave Record.');
+            }
+        });
+    } catch (error) {
+        convertValidationNotification(error);
+        loading_bar.value.finish();
+    }
+}
+
+const rejectLeave = async (id) => {
+    loading_bar.value.start();
+    resetValidationErrors();
+    try {
+        loading_bar.value.finish();
+        Swal.fire({
+            title: "Reject Leave.",
+            text: "You want to reject the Leave?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#C00202",
+            cancelButtonColor: "#6CA925",
+            confirmButtonText: "Yes, Accept it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.get(route("allleave.rejectLeave", id));
+                reload();
+                successMessage('Your Reject the leave Record.');
+            }
+        });
+    } catch (error) {
+        convertValidationNotification(error);
+        loading_bar.value.finish();
+    }
+}
 
 </script>
 

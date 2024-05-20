@@ -35,8 +35,8 @@
                                 >
                             </Link>
                         </li>
-                        <!-- v-if="$page.props.auth.user.email != 'admin@gmail.com'" -->
-                        <li class="nav-item" >
+                        
+                        <li class="nav-item" v-if="$page.props.auth.user.email != 'admin@gmail.com'">
                             <Link
                             :class="{
                                     active__sidebar:
@@ -53,6 +53,24 @@
                                 >
                             </Link>
                         </li>
+                        <li class="nav-item" v-if="$page.props.auth.user.email == 'admin@gmail.com'">
+                            <Link
+                            :class="{
+                                    active__sidebar:
+                                        $page.url.startsWith(
+                                            '/all_leave'
+                                        ),
+                                }"
+                                class="nav-link active-preloader"
+                                :href="route('allleave.index')"
+                            >
+                                <font-awesome-icon icon="fa-solid fa-calendar-days" />
+                                <span class="ml-2 hide-menu font-weight-400"
+                                    >All Leave</span
+                                >
+                            </Link>
+                        </li>
+                        
                         <li class="nav-item" v-if="$page.props.auth.user.email == 'admin@gmail.com'">
                             <Link
                             :class="{

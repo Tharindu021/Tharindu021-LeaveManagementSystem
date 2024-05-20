@@ -193,8 +193,8 @@
                                                 NAME
                                             </div>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control form-control-sm" name="name"
-                                                    v-model="user.name" id="name" placeholder="Name" required />
+                                                <input type="text" class="form-control form-control-sm" name="name1"
+                                                    v-model="user.name" id="name1" placeholder="Name" required />
                                                 <small v-if="validationErrors.message
                                                 " id="msg_code" class="text-danger form-text text-error-msg error">
                                                     {{
@@ -262,10 +262,10 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { onBeforeMount } from "vue";
 import axios from "axios";
-import { faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faUsers , faCirclePlus , faXmark , faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import LoadingBar from "@/Components/Basic/LoadingBar.vue";
 
-library.add(faUsers);
+library.add( faUsers , faCirclePlus ,faXmark ,faFloppyDisk );
 
 const loading_bar = ref(null);
 const textClassHead = ref("text-start text-uppercase");

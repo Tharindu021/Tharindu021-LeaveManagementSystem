@@ -19,6 +19,8 @@
 </template>
 
 <script setup>
+
+import { Head } from '@inertiajs/vue3';
 import SideBar from "@/Components/Main/SideBar.vue";
 import NavBar from "@/Components/Main/NavBar.vue";
 import Footer from "@/Components/Main/Footer.vue";

@@ -13,12 +13,19 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class LeaveDataController extends ParentController
 {
-    public function myleaveIndex()
+    public function leaveIndex()
     {
-        return Inertia::render('MyLeaves/index');
+        if(Auth::user()->id == 1)
+        {
+            return Inertia::render('AllLeaves/index');
+        }else
+        {
+            return Inertia::render('MyLeaves/index');
+        }
+        
     }
 
-    public function myleaveData()
+    public function leaveData()
     {
         $user_id = Auth::user()->id;
         if($user_id == 1)
@@ -41,6 +48,7 @@ class LeaveDataController extends ParentController
                         })
                     ])
                 ->paginate(request('per_page', config('basic.pagination_per_page')));
+                $payload->load('user_name');
             return DataResource::collection($payload);
         }else
         {
@@ -74,8 +82,18 @@ class LeaveDataController extends ParentController
         return LeaveDataFacade::store($data);
     }
 
-    public function myleaveDelete($id)
+    public function leaveDelete($id)
     {
         return LeaveDataFacade::delete($id);
+    }
+
+    public function acceptLeave($leave_id)
+    {
+        return LeaveDataFacade::acceptLeave($leave_id);
+    }
+    
+    public function rejectLeave($leave_id)
+    {
+        return LeaveDataFacade::rejectLeave($leave_id);
     }
 }

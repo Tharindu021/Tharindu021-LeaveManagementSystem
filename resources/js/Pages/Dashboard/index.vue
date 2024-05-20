@@ -30,6 +30,8 @@
 </template>
 
 <script setup>
+
+import { Link } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faHouse } from '@fortawesome/free-solid-svg-icons'
