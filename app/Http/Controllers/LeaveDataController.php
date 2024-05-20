@@ -39,9 +39,9 @@ class LeaveDataController extends ParentController
                 $end_date = request('search_end_date');
                 $query->where('end_date', 'like', "%{$end_date}%");
             }
-            if (request('search_status')) {
+            if (request()->has('search_status')) {
                 $status = request('search_status');
-                $query->where('status', 'like', "%{$status}%");
+                $query->where('status', $status);
             }
             if (request('search_user_name')) {
                 $user_name = request('search_user_name');

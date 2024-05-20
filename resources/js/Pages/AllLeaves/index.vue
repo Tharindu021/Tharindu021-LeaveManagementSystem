@@ -363,6 +363,7 @@ const errorMessage = (message) => {
 
 const clearFilters = async () => {
     search_data.value = {};
+    search_status.value = null;
     reload();
 };
 
