@@ -30,8 +30,7 @@ class PermissionService
 
     public function getUserPermission($user)
     {
-        
-        $permission = $user->getAllPermissions();
+        $permission = $user->getAllPermissions()->pluck('name');
         return $permission;
     }
 }

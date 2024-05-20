@@ -33,14 +33,29 @@
                     <div class="card shadow">
                         <div class="py-3 mx-3 text-sm card-body">
                             <div class="flex">
-                                <div class="col-md-3 mx-3 column__right___padding column__left___padding">
+                                <div class="col-md-2 mx-3 column__right___padding column__left___padding">
+                                    <div for="purchase_uom" class="col-form-label">
+                                        User Name
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm" name="search_name" id="search_name"
+                                        v-model="search_data.name" placeholder="User Name" @keyup="getSearch" />
+                                 </div>
+                                <div class="col-md-2 column__left___padding column__right___padding">
+                                    <div for="purchase_uom" class="col-form-label">
+                                        Status
+                                    </div>
+                                    <Multiselect v-model="search_status" :options="status" class="z__index"
+                                        :showLabels="false" :close-on-select="true" :clear-on-select="false"
+                                        :searchable="true" placeholder="Select Status" label="status" track-by="id" />
+                                </div>
+                                <div class="col-md-2 mx-3 column__right___padding column__left___padding">
                                     <div for="purchase_uom" class="col-form-label">
                                         Start Date
                                     </div>
                                     <input type="date" class="form-control form-control-sm" name="start_date" id="start_date"
                                         v-model="search_data.start_date" placeholder="Start Date" @change="getSearch" />
                                  </div>
-                                <div class="col-md-3 mx-3 column__right___padding column__left___padding">
+                                <div class="col-md-2 mx-3 column__right___padding column__left___padding">
                                     <div for="purchase_uom" class="col-form-label">
                                         End Date
                                     </div>
@@ -74,7 +89,7 @@
                                             <th :class="textClassHead">End Date</th>
                                             <th :class="textClassHead">Reason</th>
                                             <th :class="statusClassHead">
-                                                Action
+                                                Status
                                             </th>
                                             <th :class="textClassHead"></th>
                                         </tr>
@@ -94,26 +109,27 @@
                                                 {{ leave_data.reason }}
                                             </td>
                                             <td :class="statusClassBody">
-                                                <span v-if="leave_data.status == 0">
-                                                    <a type="button" href="javascript:void(0)"
-                                                    @click.prevent="acceptLeave(leave_data.id)">
-                                                        <span class="badge bg-success text-white fw-bold ml-3">Accept</span>
-                                                    </a>
-                                                    <a type="button" href="javascript:void(0)"
-                                                    @click.prevent="rejectLeave(leave_data.id)">
-                                                        <span class="badge bg-danger text-white fw-bold ml-3">Reject</span>
-                                                    </a>
-                                                </span>
+                                                <span v-if="leave_data.status == 0"
+                                                    class="badge bg-warning text-white fw-bold ml-3">Pending</span>
                                                 <span v-if="leave_data.status == 1"
                                                     class="badge bg-success text-white fw-bold ml-3">Accepted</span>
                                                 <span v-if="leave_data.status == 2"
-                                                    class="badge bg-warning text-white fw-bold ml-3">Rejected</span>
+                                                    class="badge bg-danger text-white fw-bold ml-3">Rejected</span>
                                             </td>
-                                            <td :class="iconClassBody">
-                                                <a type="button" class="p-2 float-end" href="javascript:void(0)"
+                                            <td :class="statusClassBody">
+                                                <span v-if="leave_data.status == 0" >
+                                                    <a type="button" class="float-end ml-3" href="javascript:void(0)"
+                                                    @click.prevent="acceptLeave(leave_data.id)" style="font-size: 1.5em; color: Dodgerblue;" >
+                                                        <font-awesome-icon icon="fa-solid fa-check" />
+                                                    </a>
+                                                    <a type="button" class="float-end ml-3" href="javascript:void(0)"
+                                                    @click.prevent="rejectLeave(leave_data.id)" style="font-size: 1.5em; color: Tomato;" >
+                                                        <font-awesome-icon icon="fa-solid fa-xmark" />
+                                                    </a>
+                                                </span>
+                                                <a type="button" class="float-end ml-3" href="javascript:void(0)"
                                                     @click.prevent="
-                                                deleteLeave(leave_data.id)
-                                                ">
+                                                deleteLeave(leave_data.id)" style="font-size: 1.5em; color: crimson;">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>
@@ -207,11 +223,13 @@ import { nextTick, ref } from "vue";
 import AppLayout from "../../Layouts/AppLayout.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { onBeforeMount } from "vue";
+import { onBeforeMount , watch} from "vue";
 import axios from "axios";
 import LoadingBar from "@/Components/Basic/LoadingBar.vue";
+import Multiselect from "vue-multiselect";
 
 import {
+    faCheck,
     faHouse, 
     faFloppyDisk,
     faCirclePlus,
@@ -226,6 +244,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
+    faCheck,
     faHouse,
     faFloppyDisk,
     faCirclePlus,
@@ -239,7 +258,13 @@ library.add(
     faXmark,
 );
 
+const status = ref([ 
+    { id: 0, status: 'Pending' },
+    { id: 1, status: 'Accept' },
+    { id: 2, status: 'Reject' } 
+]);
 
+const search_status = ref(null);
 const loading_bar = ref(null);
 const textClassHead = ref("text-start text-uppercase");
 const textClassBody = ref("text-start");
@@ -262,6 +287,14 @@ onBeforeMount(() => {
     getLeaveData();
     reload();
 });
+
+watch(
+    () => search_status.value,
+    (newX, oldX) => {
+        search_data.value.status = newX ? newX.id : null;
+        getSearch();
+    }
+);
 
 const setPage = async (page) => {
     page.value = page;
@@ -345,8 +378,10 @@ const reload = async () => {
                     page: page.value,
                     per_page: pageCount.value,
                     "filter[search]": search.value,
+                    search_status: search_data.value.status,
                     search_start_date: search_data.value.start_date,
                     search_end_date: search_data.value.end_date,
+                    search_user_name: search_data.value.name,
                 },
             })
         ).data;

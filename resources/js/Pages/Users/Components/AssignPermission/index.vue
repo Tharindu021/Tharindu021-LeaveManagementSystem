@@ -14,8 +14,8 @@
                                     <li class="list-group-item mb-1" v-for="permission in permissions" :key="permission.id" >
                                         <div class="form-check form-switch" v-if="permission.group_name == group.group_name">
                                             <input class="form-check-input mt-0" type="checkbox"
-                                                v-model="user_permissions" :id="permission.name"
-                                                :value="permission.name">
+                                                v-model="user_permissions" :id="permission.id"
+                                                :value="permission.name" :key="permission.name">
                                             <label class="form-check-label" :for="permission.name">
                                                 {{ permission.name }}
                                             </label>
@@ -38,6 +38,7 @@
         </div>
     </div>
 </template>
+
 
 <script setup>
 import { ref , onBeforeMount } from 'vue';
@@ -64,6 +65,7 @@ onBeforeMount(() => {
     getPermissionGroup();
     getUserPermission();
 });
+
 
 const successMessage = (message) => {
     Swal.fire({
@@ -119,6 +121,7 @@ const getUserPermission = async () => {
 }
 
 const updatePermission = async () => {
+    //console.log(user_permissions.value);
     try {
         //console.log(props.userId);
         await axios.post(route("permission.update", props.userId), {

@@ -39,11 +39,22 @@ class LeaveDataController extends ParentController
                 $end_date = request('search_end_date');
                 $query->where('end_date', 'like', "%{$end_date}%");
             }
+            if (request('search_status')) {
+                $status = request('search_status');
+                $query->where('status', 'like', "%{$status}%");
+            }
+            if (request('search_user_name')) {
+                $user_name = request('search_user_name');
+                $query->whereHas('user_name', function ($query) use ($user_name) {
+                    $query->where('name', 'like', "%{$user_name}%");
+                });
+            }
             $payload = QueryBuilder::for($query)
                 ->allowedSorts(['start_date'])
                 ->allowedFilters([
                     AllowedFilter::callback('search', function ($query, $value) {
-                        $query->whereHas('start_date', 'like', "%{$value}%")
+                        $query->whereHas('status', 'like', "%{$value}%")
+                            ->orWhere('start_date', 'like', "%{$value}%")
                             ->orWhere('end_date', 'like', "%{$value}%");
                         })
                     ])
